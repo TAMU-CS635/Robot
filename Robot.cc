@@ -150,7 +150,7 @@ int main()
          
     {
     capture = cvCaptureFromCAM(1);
-        // Couldn't get a device? Throw an error and quit
+    // Couldn't get a device? Throw an error and quit
     if(!capture)
     {
         printf("Could not initialize capturing...");
@@ -226,25 +226,35 @@ int main()
         }
         // Release the thresholded image+moments... we need no memory leaks.. please
         cvReleaseImage(&imgYellowThresh);
-
     
     }
-
+    // We're done using the camera. Other applications can now use it
+    cvReleaseCapture(&capture);
+        
     create.motor_raw(0,0);
     usleep(10);
 
     int testidArray[5] = {0};
-
+    // Initialize capturing live feed from the camera device 1
+    VideoCapture cap = VideoCapture(1);
+    // Couldn't get a device? Throw an error and quit
+    if(!cap.isOpened())
+    {
+        printf("Could not initialize capturing...");
+        return -1;
+    }
+        
+    Mat fram;
     for(int imageCounter = 0; imageCounter < 5; imageCounter++){
         printf("before getting image\n");
-        // get an image
-        frame = cvQueryFrame(capture);
+        // try to get an image
+        while(!cap.read(fram))
+            cap.read(fram);
 
         printf("after getting image\n");
-        // convert to Mat
-        img_mat = Mat(frame, true);
-        cv::Mat dst;
-        cvtColor(img_mat, img_mat, CV_RGB2GRAY);
+        // convert to gray scale
+        cvtColor( fram, img_mat, CV_BGR2GRAY );
+        //resize the image
         cv::resize(img_mat, img_mat, cv::Size(320,240), 0, 0, INTER_LINEAR);
         // perform SVM test
         Mat test(1,img_area,CV_32FC1);
@@ -295,9 +305,8 @@ int main()
     if(testid==4)
         get_to_mid_from_right(create);
     
-    cvReleaseCapture(&capture);
+    //cvReleaseCapture(&capture);
     }
-    // We're done using the camera. Other applications can now use it
     
     create.motor_raw(0,0);
     usleep(10);
