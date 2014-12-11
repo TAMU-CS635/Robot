@@ -30,14 +30,21 @@ void get_to_mid_from_left(Create create){
     create.motor_raw(0,-2);
     usleep(400000);
     create.move(-1);
-    usleep(3000000);
+    usleep(1500000);
+    create.motor_raw(0,0);
+    usleep(10);
+
+    create.motor_raw(0,2);
+    usleep(200000);
+    create.move(-1);
+    usleep(1500000);
     create.motor_raw(0,0);
     usleep(10);
 }
 
 void get_to_mid_from_left_mid(Create create){
     create.motor_raw(0,-2);
-    usleep(600000);
+    usleep(800000);
     create.move(-1);
     usleep(3000000);
     create.motor_raw(0,0);
@@ -49,14 +56,21 @@ void get_to_mid_from_right(Create create){
     create.motor_raw(0,2);
     usleep(400000);
     create.move(-1);
-    usleep(3000000);
+    usleep(1500000);
+    create.motor_raw(0,0);
+    usleep(10);
+
+    create.motor_raw(0,-2);
+    usleep(200000);
+    create.move(-1);
+    usleep(1500000);
     create.motor_raw(0,0);
     usleep(10);
 }
 
 void get_to_mid_from_right_mid(Create create){
 create.motor_raw(0,2);
-    usleep(600000);
+    usleep(800000);
     create.move(-1);
     usleep(3000000);
     create.motor_raw(0,0);
@@ -219,37 +233,55 @@ int main()
     create.motor_raw(0,0);
     usleep(10);
 
+    int testidArray[5] = {0};
 
-    printf("before getting image\n");
-    // get an image
-    frame = cvQueryFrame(capture);
+    for(int imageCounter = 0; imageCounter < 5; imageCounter++){
+        printf("before getting image\n");
+        // get an image
+        frame = cvQueryFrame(capture);
 
-    printf("after getting image\n");
-    // convert to Mat
-    img_mat = Mat(frame, true);
-    cv::Mat dst;
-    cvtColor(img_mat, img_mat, CV_RGB2GRAY);
-    cv::resize(img_mat, img_mat, cv::Size(320,240), 0, 0, INTER_LINEAR);
-    // perform SVM test
-    Mat test(1,img_area,CV_32FC1);
-        
-    ii = 0; // Current column in training_mat
-    for (int i = 0; i<img_mat.rows; i++) {
-        for (int j = 0; j < img_mat.cols; j++) {
-            test.at<float>(0,ii++) = img_mat.at<uchar>(i,j);
+        printf("after getting image\n");
+        // convert to Mat
+        img_mat = Mat(frame, true);
+        cv::Mat dst;
+        cvtColor(img_mat, img_mat, CV_RGB2GRAY);
+        cv::resize(img_mat, img_mat, cv::Size(320,240), 0, 0, INTER_LINEAR);
+        // perform SVM test
+        Mat test(1,img_area,CV_32FC1);
+            
+        ii = 0; // Current column in training_mat
+        for (int i = 0; i<img_mat.rows; i++) {
+            for (int j = 0; j < img_mat.cols; j++) {
+                test.at<float>(0,ii++) = img_mat.at<uchar>(i,j);
+            }
         }
-    }
-    testid = svm.predict(test);
-    printf("testid: %d \n", testid);
+        testidArray[imageCounter] = svm.predict(test);
+        printf("testid: %d \n", testid);
 
+        // move a little
+        create.move(-0.2);
+        usleep(300000);
+        create.motor_raw(0,0);
+        usleep(10);
+    }
     // release image so no memory leak
     //cvReleaseImage(&frame);
 
     // driving over the ramp
     //run_over_ramp(create, ir, rampCounter);
+    int mostOftenArray[5] = {0};
 
+    for(int i = 0; i < 5; i++){
+        if (testidArray[i] == i)
+            mostOftenArray[i]++;
+    }
+    int largest = 0;
+    int testid;
 
-
+    for(int i = 0; i < 5; i++){
+        if (mostOftenArray[i] > largest)
+            testid = i;
+    }
 
     if(testid==0)
         get_to_mid_from_left(create);
