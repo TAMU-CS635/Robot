@@ -245,20 +245,21 @@ int main()
     }
         
     Mat fram;
+    chdir("/home/netbook/Desktop/Process_Data");
     for(int imageCounter = 0; imageCounter < 5; imageCounter++){
         printf("before getting image\n");
         // try to get an image
         while(!cap.read(fram))
             cap.read(fram);
-
+        const string file = std::to_string(imageCounter) + ".jpg";
+        imwrite( file, fram );
+        img_mat = imread(file,1); // I used 0 for greyscale
         printf("after getting image\n");
         
         
-//        // convert to gray scale
-        cvtColor( fram, img_mat, CV_BGR2GRAY );
-//        //resize the image
-//        cv::resize(img_mat, img_mat, cv::Size(320,240), 0, 0, INTER_LINEAR);
-        
+        // convert to gray scale
+        cvtColor( img_mat, img_mat, CV_BGR2GRAY );
+        //resize the image
         GaussianBlur(img_mat, img_mat, Size(7,7), 1.5, 1.5);
         Canny(img_mat, img_mat, 0, 30, 3);
         resize(img_mat, img_mat, Size(160, 120), 0, 0, INTER_LINEAR);
