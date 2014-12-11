@@ -233,7 +233,7 @@ int main()
     int testidArray[5] = {0};
 
     chdir("/home/netbook/Desktop/Process_Data");
-    for(int imageCounter = 0; imageCounter < 200; imageCounter++){
+    for(int imageCounter = 0; imageCounter < 30; imageCounter++){
         printf("before getting image\n");
         // try to get an image
         frame = cvQueryFrame(capture);
@@ -244,26 +244,26 @@ int main()
         printf("after getting image\n");
         
         // convert to gray scale
-        cvtColor( img_mat, img_mat, CV_BGR2GRAY );
+        //cvtColor( img_mat, img_mat, CV_BGR2GRAY );
         //resize the image
-        GaussianBlur(img_mat, img_mat, Size(7,7), 1.5, 1.5);
-        Canny(img_mat, img_mat, 0, 30, 3);
-        resize(img_mat, img_mat, Size(160, 120), 0, 0, INTER_LINEAR);
+        //GaussianBlur(img_mat, img_mat, Size(7,7), 1.5, 1.5);
+        //Canny(img_mat, img_mat, 0, 30, 3);
+        //resize(img_mat, img_mat, Size(160, 120), 0, 0, INTER_LINEAR);
         
         // perform SVM test
-        Mat test(1,img_area,CV_32FC1);
+        //Mat test(1,img_area,CV_32FC1);
             
-        ii = 0; // Current column in training_mat
-        for (int i = 0; i<img_mat.rows; i++) {
-            for (int j = 0; j < img_mat.cols; j++) {
-                test.at<float>(0,ii++) = img_mat.at<uchar>(i,j);
-            }
-        }
-        testidArray[imageCounter] = svm.predict(test);
+        //ii = 0; // Current column in training_mat
+        //for (int i = 0; i<img_mat.rows; i++) {
+        //    for (int j = 0; j < img_mat.cols; j++) {
+        //        test.at<float>(0,ii++) = img_mat.at<uchar>(i,j);
+        //    }
+        //}
+        //testidArray[imageCounter] = svm.predict(test);
         //printf("testid: %d \n", testid);
-        printf("testid: %d \n", svm.predict(test));
+        //printf("testid: %d \n", svm.predict(test));
         // move a little
-        create.move(-0.01);
+        create.move(-0.075);
         usleep(300000);
         create.motor_raw(0,0);
         usleep(10);
