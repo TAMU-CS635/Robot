@@ -183,8 +183,8 @@ int main()
         moment01 = cvGetSpatialMoment(moments, 0, 1);
         double area = 0;
         area = cvGetCentralMoment(moments, 0, 0);
-        printf("area %f\n", area);
-        printf("area counter %d \n",areaCounter);
+        //printf("area %f\n", area);
+        //printf("area counter %d \n",areaCounter);
         if(area > 5000 && area < 120000){
             // Holding the current position of the object
             static int posX = 0;
@@ -294,16 +294,20 @@ int main()
     }
 
     if(testid==0)
-        get_to_mid_from_left(create);
+        printf("id 0\n");
+        //get_to_mid_from_left(create);
     else
     if(testid==1)
-        get_to_mid_from_left_mid(create);
+        printf("id 1\n");
+        //get_to_mid_from_left_mid(create);
     else
     if(testid==3)
-        get_to_mid_from_right_mid(create);
+        printf("id 3\n");
+        //get_to_mid_from_right_mid(create);
     else
     if(testid==4)
-        get_to_mid_from_right(create);
+        printf("id 4\n");
+        //get_to_mid_from_right(create);
     
     //cvReleaseCapture(&capture);
     }
