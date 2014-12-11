@@ -229,33 +229,21 @@ int main()
     
     }
     // We're done using the camera. Other applications can now use it
-    cvReleaseCapture(&capture);
         
     create.motor_raw(0,0);
     usleep(10);
 
     int testidArray[5] = {0};
-    // Initialize capturing live feed from the camera device 1
-    VideoCapture cap = VideoCapture(1);
-    // Couldn't get a device? Throw an error and quit
-    if(!cap.isOpened())
-    {
-        printf("Could not initialize capturing...");
-        return -1;
-    }
-        
-    Mat fram;
+
     chdir("/home/netbook/Desktop/Process_Data");
     for(int imageCounter = 0; imageCounter < 5; imageCounter++){
         printf("before getting image\n");
         // try to get an image
-        while(!cap.read(fram))
-            cap.read(fram);
+        frame = cvQueryFrame(capture);
         const string file = std::to_string(imageCounter) + ".jpg";
-        imwrite( file, fram );
+        cvSaveImage(file, frame);
         img_mat = imread(file,1); // I used 0 for greyscale
         printf("after getting image\n");
-        
         
         // convert to gray scale
         cvtColor( img_mat, img_mat, CV_BGR2GRAY );
@@ -317,7 +305,7 @@ int main()
         printf("id 4\n");
         //get_to_mid_from_right(create);
     
-    //cvReleaseCapture(&capture);
+    cvReleaseCapture(&capture);
     }
     
     create.motor_raw(0,0);
