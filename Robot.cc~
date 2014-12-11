@@ -40,7 +40,7 @@ void get_to_mid_from_left_mid(){
 
 void get_to_mid_from_right(Create create){
     create.motor_raw(0,2);
-    usleep(500000);
+    usleep(5000000);
     create.move(-1);
     usleep(3000000);
     create.motor_raw(0,0);
