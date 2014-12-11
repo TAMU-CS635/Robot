@@ -241,7 +241,8 @@ int main()
         // try to get an image
         frame = cvQueryFrame(capture);
         const string file = std::to_string(imageCounter) + ".jpg";
-        cvSaveImage(file, frame);
+        const char * c = file.c_str();
+        cvSaveImage(c, frame);
         img_mat = imread(file,1); // I used 0 for greyscale
         printf("after getting image\n");
         
