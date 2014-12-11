@@ -28,25 +28,39 @@ IplImage* GetThresholdedImage(IplImage* img)
 
 void get_to_mid_from_left(Create create){
     create.motor_raw(0,-2);
-    usleep(500000);
+    usleep(400000);
     create.move(-1);
     usleep(3000000);
     create.motor_raw(0,0);
+    usleep(10);
 }
 
 void get_to_mid_from_left_mid(){
+    create.motor_raw(0,-2);
+    usleep(600000);
+    create.move(-1);
+    usleep(3000000);
+    create.motor_raw(0,0);
+    usleep(10);
     
 }
 
 void get_to_mid_from_right(Create create){
     create.motor_raw(0,2);
-    usleep(5000000);
+    usleep(400000);
     create.move(-1);
     usleep(3000000);
     create.motor_raw(0,0);
+    usleep(10);
 }
 
 void get_to_mid_from_right_mid(){
+create.motor_raw(0,2);
+    usleep(600000);
+    create.move(-1);
+    usleep(3000000);
+    create.motor_raw(0,0);
+    usleep(10);
     
 }
 
@@ -102,14 +116,9 @@ int main()
     // Initialize capturing live feed from the camera
     CvCapture* capture = 0;
     
-    capture = cvCaptureFromCAM(1);
+
     
-    // Couldn't get a device? Throw an error and quit
-    if(!capture)
-    {
-        printf("Could not initialize capturing...");
-        return -1;
-    }
+
     // The window we'll be using
     cvNamedWindow("thresh");
 
@@ -119,13 +128,29 @@ int main()
     // Will hold a frame captured from the camera
     IplImage* frame = 0;
 
+    //set test id
+     int testid = 0;
+
     // An infinite loop
-    while(true)
+    while(testid!=2)
+         
     {
+    capture = cvCaptureFromCAM(1);
+        // Couldn't get a device? Throw an error and quit
+    if(!capture)
+    {
+        printf("Could not initialize capturing...");
+        return -1;
+    }
+    areaCounter=0;
+    while(true){
+
         frame = cvQueryFrame(capture);
         // If we couldn't grab a frame... quit
-        if(!frame)
+        if(!frame){
+            printf("No Frame \n");
             break;
+        }
 
         // Holds the yellow thresholded image (yellow = white, rest = black)
         IplImage* imgYellowThresh = GetThresholdedImage(frame);
@@ -142,10 +167,10 @@ int main()
         static double moment01 = 0;
         moment10 = cvGetSpatialMoment(moments, 1, 0);
         moment01 = cvGetSpatialMoment(moments, 0, 1);
-        static double area = 0;
+        double area = 0;
         area = cvGetCentralMoment(moments, 0, 0);
         printf("area %f\n", area);
-        
+        printf("area counter %d \n",areaCounter);
         if(area > 5000 && area < 120000){
             // Holding the current position of the object
             static int posX = 0;
@@ -171,26 +196,30 @@ int main()
         }
 
         if (areaCounter > 3){
+            cvReleaseImage(&imgYellowThresh);
             break;
         }
 
         cvShowImage("thresh", imgYellowThresh);
-
+        
         // Wait for a keypress
         int c = cvWaitKey(10);
         if(c!=-1)
         {
+            cvReleaseImage(&imgYellowThresh);
             // If pressed, break out of the loop
             break;
         }
         // Release the thresholded image+moments... we need no memory leaks.. please
         cvReleaseImage(&imgYellowThresh);
+
+    
     }
 
     create.motor_raw(0,0);
     usleep(10);
 
-    int testid = 0;
+
     printf("before getting image\n");
     // get an image
     frame = cvQueryFrame(capture);
@@ -211,23 +240,34 @@ int main()
         }
     }
     testid = svm.predict(test);
-    printf("testid: %d", testid);
+    printf("testid: %d \n", testid);
 
     // release image so no memory leak
-    cvReleaseImage(&frame);
+    //cvReleaseImage(&frame);
 
     // driving over the ramp
     //run_over_ramp(create, ir, rampCounter);
 
-    // We're done using the camera. Other applications can now use it
-    cvReleaseCapture(&capture);
 
-    if(testid==0||testid==1)
+
+
+    if(testid==0)
         get_to_mid_from_left(create);
     else
-    if(testid==3||testid==4)
+    if(testid==1)
+        get_to_mid_from_left_mid(create);
+    else
+    if(testid==3)
+        get_to_mid_from_right_mid(create);
+    else
+    if(testid==4)
         get_to_mid_from_right(create);
-
-
+    
+    cvReleaseCapture(&capture);
+    }
+    // We're done using the camera. Other applications can now use it
+    
+    create.motor_raw(0,0);
+    usleep(10);
     return 0;
 }
