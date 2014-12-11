@@ -1,7 +1,7 @@
 all: Robot
 
-Robot: Robot.o Create.o SearchBehavior.o
-	g++ `pkg-config --cflags opencv` Robot.o Create.o SearchBehavior.o -o Robot `pkg-config --libs opencv` -L ~/local/lib -rdynamic -lplayerc -lm -lz -lplayerinterface -lplayerwkb -lplayercommon -Wl,-rpath,~/local/lib
+Robot: Robot.o Create.o SearchBehavior.o MoveToCenterBehavior.o
+	g++ `pkg-config --cflags opencv` Robot.o Create.o SearchBehavior.o MoveToCenterBehavior.o -o Robot `pkg-config --libs opencv` -L ~/local/lib -rdynamic -lplayerc -lm -lz -lplayerinterface -lplayerwkb -lplayercommon -Wl,-rpath,~/local/lib
 	rm *.o
 
 Robot.o: Robot.cc Create.h
@@ -12,6 +12,9 @@ Create.o: Create.cc Create.h
 
 SearchBehavior.o: SearchBehavior.cc SearchBehavior.h
 	g++ -o SearchBehavior.o -I /usr/include/player-3.0 -c SearchBehavior.cc
+
+MoveToCenterBehavior.o: MoveToCenterBehavior.cc MoveToCenterBehavior.h
+	g++ -o MoveToCenterBehavior.o -I /usr/include/player-3.0 -c MoveToCenterBehavior.cc
 
 clean:
 	rm -f *.o Robot
