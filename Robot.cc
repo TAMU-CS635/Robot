@@ -233,7 +233,7 @@ int main()
     int testidArray[5] = {0};
 
     chdir("/home/netbook/Desktop/Process_Data");
-    for(int imageCounter = 0; imageCounter < 5; imageCounter++){
+    for(int imageCounter = 0; imageCounter < 200; imageCounter++){
         printf("before getting image\n");
         // try to get an image
         frame = cvQueryFrame(capture);
@@ -263,7 +263,7 @@ int main()
         //printf("testid: %d \n", testid);
         printf("testid: %d \n", svm.predict(test));
         // move a little
-        create.move(-0.2);
+        create.move(-0.01);
         usleep(300000);
         create.motor_raw(0,0);
         usleep(10);
