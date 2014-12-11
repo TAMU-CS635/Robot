@@ -111,7 +111,7 @@ void run_over_ramp(Create create, Create::ir_values ir, int rampCounter){
 int main()
 {
     //Initialize learning machine
-    int img_area = 320*240;
+    int img_area = 160*120;
     Mat img_mat;
     int ii = 0;
     CvSVM svm;
@@ -261,7 +261,7 @@ int main()
         
         GaussianBlur(img_mat, img_mat, Size(7,7), 1.5, 1.5);
         Canny(img_mat, img_mat, 0, 30, 3);
-        resize(img_mat, img_mat, Size(320, 240), 0, 0, INTER_LINEAR);
+        resize(img_mat, img_mat, Size(160, 120), 0, 0, INTER_LINEAR);
         
         // perform SVM test
         Mat test(1,img_area,CV_32FC1);
