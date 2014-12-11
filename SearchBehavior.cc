@@ -1,8 +1,12 @@
 #include "SearchBehavior.h"
 
-class SearchBehavior::SearchBehavior(Create create, bool showWindow) {
-  this.create = create;
-  this.showWindow = showWindow;
+
+SearchBehavior::SearchBehavior(Create create, bool showWindow) {
+  this -> create = create;
+  this -> showWindow = showWindow;
+  this -> velocity = -0.1;
+  this -> minArea = 5000;
+  this -> maxArea = 120000;
 }
 
 IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
@@ -40,8 +44,8 @@ void SearchBehavior::find() {
   capture = cvCaptureFromCAM(1);
 
   // create a window
-  if(this.showWindow)
-    cvNameWindow("thresh");
+  if(this -> showWindow)
+    cvNamedWindow("thresh");
 
   // loop until area is greater than maxArea 3 times in a row
   while(areaCounter < 4){
@@ -63,27 +67,27 @@ void SearchBehavior::find() {
     area = cvGetSpatialMoment(moments, 0, 0);
 
     // decide action based on area of the blob
-    if(area > this.minArea && area < this.maxArea){
+    if(area > this -> minArea && area < this -> maxArea){
       // calculate angular speed
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
       // put motor command
-      this.create.motor_raw(this.velocity, angularSpeed);
+      this -> create.motor_raw(this -> velocity, angularSpeed);
       usleep(10);
       // reset area counter
       areaCounter = 0;
-    } else if(area >= this.maxArea) {
+    } else if(area >= this -> maxArea) {
       // area is above the threshold
       areaCounter++;
     } else {
       // spin
-      this.create.motor_raw(0, 0.38);
+      this -> create.motor_raw(0, 0.38);
       usleep(10);
       // reset area counter
       areaCounter = 0;
     }
 
     // display blob image in window
-    if(this.showWindow){
+    if(this -> showWindow){
       cvShowImage("thresh", imgYellowThresh);
 
       // Wait for a keypress
@@ -95,7 +99,7 @@ void SearchBehavior::find() {
     cvReleaseImage(&imgYellowThresh);
   }
   // stop
-  this.create.motor_raw(0,0);
+  this -> create.motor_raw(0,0);
   usleep(10);
 
   // release the camera

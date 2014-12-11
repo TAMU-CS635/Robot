@@ -1,26 +1,26 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #include "Create.h"
+#include <unistd.h>
 
 class SearchBehavior {
   private:
     Create create;
 
-    float velocity = -0.1;
+    float velocity;
 
-    int minArea = 5000;
-    int maxArea = 120000;
+    int minArea;
+    int maxArea;
 
     bool showWindow;
 
   public:
-    SearchBehavior();
-
-    SearchBehavior(Create create);
+    SearchBehavior(Create create, bool showWindow);
 
     void find();
 
-    static IplImage* GetThresholdedImage(IplImage* img);
+    static IplImage* get_thresholded_image(IplImage* img);
     static float get_angular_speed(double moment10, double moment01, double area);
 
-}
+};
