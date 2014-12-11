@@ -11,7 +11,6 @@
 using namespace cv;
 
 float velocity = 0.1;
-float old_area = 0;
 // number of ir readings in a row to test for ramp
 int maxRampCounter = 20;
 
@@ -226,9 +225,7 @@ int main()
         }
         // Release the thresholded image+moments... we need no memory leaks.. please
         cvReleaseImage(&imgYellowThresh);
-    
     }
-    // We're done using the camera. Other applications can now use it
         
     create.motor_raw(0,0);
     usleep(10);
@@ -243,7 +240,7 @@ int main()
         const string file = std::to_string(imageCounter) + ".jpg";
         const char * c = file.c_str();
         cvSaveImage(c, frame);
-        img_mat = imread(file,1); // I used 0 for greyscale
+        img_mat = imread(file,1);
         printf("after getting image\n");
         
         // convert to gray scale
@@ -263,8 +260,8 @@ int main()
             }
         }
         testidArray[imageCounter] = svm.predict(test);
-        printf("testid: %d \n", testid);
-
+        //printf("testid: %d \n", testid);
+        printf("testid: %d \n", svm.predict(test));
         // move a little
         create.move(-0.2);
         usleep(300000);
