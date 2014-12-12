@@ -8,6 +8,8 @@
 class MoveToCenterBehavior {
     private:
         Create create;
+        int imgWidth;
+        int imgHeight;
         int imgArea;
 
     public:

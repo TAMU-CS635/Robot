@@ -4,7 +4,9 @@ using namespace cv;
 
 MoveToCenterBehavior::MoveToCenterBehavior(Create create){
     this -> create = create;
-    this -> imgArea = 320*240;
+    this -> imgWidth = 160;
+    this -> imgHeight = 120;
+    this -> imgArea = imgWidth*imgHeight;
 }
 
 Mat MoveToCenterBehavior::get_test_matrix() {
@@ -19,7 +21,7 @@ Mat MoveToCenterBehavior::get_test_matrix() {
 
     cvtColor(frame, imgMat, CV_BGR2GRAY);
 
-    cv::resize(imgMat, imgMat, cv::Size(320, 240), 0, 0, INTER_LINEAR);
+    cv::resize(imgMat, imgMat, cv::Size(this -> imgWidth, this -> imgHeight), 0, 0, INTER_LINEAR);
 
     Mat test(1, this -> imgArea, CV_32FC1);
 

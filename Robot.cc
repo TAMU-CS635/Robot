@@ -73,7 +73,9 @@ int main()
 	// predict the testid
 	testid = svm.predict(test);
 	// move based on test id
-        moveToCenterBehavior.drive_to_center(testid);
+        // moveToCenterBehavior.drive_to_center(testid);
+        printf("testid: %d\n", testid);
+        break;
     }
 
     return 0;
