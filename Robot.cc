@@ -66,13 +66,13 @@ int main()
     // An infinite loop
     while(testid!=2)
     {
-	    // find the ramp and drive up to it
+      // find the ramp and drive up to it
       searchBehavior.find();
-	    // get the test matrix
-	    test = moveToCenterBehavior.get_test_matrix();
-	    // predict the testid
-	    testid = svm.predict(test);
-	    // move based on test id
+      // get the test matrix
+      test = moveToCenterBehavior.get_test_matrix();
+      // predict the testid
+      testid = svm.predict(test);
+      // move based on test id
       // moveToCenterBehavior.drive_to_center(testid);
       printf("testid: %d\n", testid);
       break;
