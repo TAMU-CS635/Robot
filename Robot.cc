@@ -18,7 +18,6 @@ void run_over_ramp(Create create, Create::ir_values ir, int rampCounter){
         } else {
             rampCounter = 0;
         }
-        
         if (rampCounter > maxRampCounter){
             create.motor_raw(0,0);
             usleep(10);
@@ -45,7 +44,7 @@ int main()
     printf("loading learned_lib\n");
     //Load learned library
     svm.load("learned_lib");
-    
+
     //Initialize IRobot Create
     Create create;
     create.lights(0, 0, 0);
@@ -66,17 +65,17 @@ int main()
 
     // An infinite loop
     while(testid!=2)
-    { 
+    {
 	    // find the ramp and drive up to it
-        searchBehavior.find();
+      searchBehavior.find();
 	    // get the test matrix
 	    test = moveToCenterBehavior.get_test_matrix();
 	    // predict the testid
 	    testid = svm.predict(test);
 	    // move based on test id
-        // moveToCenterBehavior.drive_to_center(testid);
-        printf("testid: %d\n", testid);
-        break;
+      // moveToCenterBehavior.drive_to_center(testid);
+      printf("testid: %d\n", testid);
+      break;
     }
 
     return 0;

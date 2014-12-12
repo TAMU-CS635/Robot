@@ -1,3 +1,6 @@
+#ifndef SEARCHBEHAVIOR_H_
+#define SEARCHBEHAVIOR_H_
+
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -24,3 +27,4 @@ class SearchBehavior {
     static float get_angular_speed(double moment10, double moment01, double area);
 
 };
+#endif
