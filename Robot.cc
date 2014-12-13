@@ -13,7 +13,7 @@ int main()
     CvSVM svm;
     printf("loading learned_lib\n");
     //Load learned library
-    svm.load("learned_lib");
+    svm.load("../learned_lib");
 
     //Initialize IRobot Create
     Create create;
@@ -32,7 +32,7 @@ int main()
 
     // matrix for the test
     Mat test;
-
+    /*
     // An infinite loop
     while(testid!=2)
 
@@ -47,6 +47,7 @@ int main()
         moveToCenterBehavior.drive_to_center(testid);
         printf("testid: %d\n", testid);
     }
+    */
     driveOverRampBehavior.go();
 
     return 0;
