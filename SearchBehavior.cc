@@ -47,6 +47,8 @@ void SearchBehavior::find() {
   if(this -> showWindow)
     cvNamedWindow("thresh");
 
+  bool moved = false;
+
   // loop until area is greater than maxArea 3 times in a row
   while(areaCounter < 4){
     frame = cvQueryFrame(capture);
@@ -68,6 +70,7 @@ void SearchBehavior::find() {
 
     // decide action based on area of the blob
     if(area > this -> minArea && area < this -> maxArea){
+      moved=true;
       // calculate angular speed
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
       // put motor command
@@ -78,6 +81,14 @@ void SearchBehavior::find() {
     } else if(area >= this -> maxArea) {
       // area is above the threshold
       areaCounter++;
+        if(areaCounter==4&&moved==false){
+
+        create.move(1);
+        usleep(300000);    
+        areaCounter=0;
+
+        }
+            
     } else {
       // spin
       this -> create.motor_raw(0, 0.38);

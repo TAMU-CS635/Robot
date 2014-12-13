@@ -32,7 +32,7 @@ int main()
 
     // matrix for the test
     Mat test;
-    /*
+    
     // An infinite loop
     while(testid!=2)
 
@@ -44,11 +44,12 @@ int main()
 	    // predict the testid
 	    testid = svm.predict(test);
 	    // move based on test id
-        moveToCenterBehavior.drive_to_center(testid);
+        //moveToCenterBehavior.drive_to_center(testid);
         printf("testid: %d\n", testid);
+        break;
     }
-    */
-    driveOverRampBehavior.go();
+    
+    //driveOverRampBehavior.go();
 
     return 0;
 }
