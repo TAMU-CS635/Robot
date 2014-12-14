@@ -45,9 +45,9 @@ void MoveToCenterBehavior::drive_to_center(int testid){
             create.motor_raw(0,-2);
             usleep(500000);
             create.move(-1);
-            usleep(1500000);
+            usleep(2700000);
             create.motor_raw(0, 2);
-            usleep(200000);
+            usleep(350000);
             create.move(-1);
             usleep(1200000);
             break;
@@ -70,9 +70,9 @@ void MoveToCenterBehavior::drive_to_center(int testid){
             create.motor_raw(0, 2);
             usleep(500000);
             create.move(-1);
-            usleep(1500000);
+            usleep(2700000);
             create.motor_raw(0, -2);
-            usleep(200000);
+            usleep(350000);
             create.move(-1);
             usleep(1200000);
             break;

@@ -54,7 +54,7 @@ void DriveOverRampBehavior::go() {
     // calculate angular speed
     angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
     // put motor command
-    this -> create.motor_raw(this -> velocity, -angularSpeed);
+    this -> create.motor_raw(this -> velocity, angularSpeed);
     usleep(10);
 
     ir = create.read_ir();
@@ -91,7 +91,7 @@ void DriveOverRampBehavior::go() {
   usleep(10);
 
   // on the ramp
-  while(rampCounter < (this -> maxRampCounter + 10)) {
+  while(rampCounter < this -> maxRampCounter) {
     ir = create.read_ir();
     std::cout << "fleft: " << ir.fleft << " fright: " << ir.fright << std::endl;
     if(ir.left < 200) {
@@ -105,7 +105,7 @@ void DriveOverRampBehavior::go() {
     } else {
       create.move(-this -> velocity);
       usleep(10);
-      if(ir.fleft < (initial_ir + 50) && (ir.fright < initial_ir + 50)){
+      if((ir.fleft < (initial_ir + 100) && ir.fleft > 500) || (ir.fright < (initial_ir + 100) && ir.fright > 500)){
         rampCounter++;
       } else {
         rampCounter = 0;
