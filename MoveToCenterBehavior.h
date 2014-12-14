@@ -26,7 +26,8 @@ class MoveToCenterBehavior {
 
     public:
         MoveToCenterBehavior(Create create, Mat vocabulary);
-
+        
+        cv::Mat GetThresholdedImage(Mat img);
         cv::Mat get_test_matrix();
         void drive_to_center(int testid);
 };

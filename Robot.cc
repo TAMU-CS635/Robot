@@ -39,7 +39,9 @@ int main()
     // instantiate move to center behavior
     MoveToCenterBehavior moveToCenterBehavior(create, vocabulary);
 
-    int front_initial_ir = (ir.fleft + ir.fright) / 2;
+
+    int initial_ir = (ir.fleft + ir.fright) / 2;
+
     std::cout << "initial ir: " << initial_ir << std::endl;
 
     // instantiate drive over ramp behavior

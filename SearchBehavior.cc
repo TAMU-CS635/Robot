@@ -5,8 +5,9 @@ SearchBehavior::SearchBehavior(Create create, bool showWindow) {
   this -> create = create;
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
-  this -> minArea = 2000;
-  this -> maxArea = 150000;
+  this -> minArea = 1900;
+  this -> maxArea = 112000;
+  //this -> maxArea = 115000;
 }
 
 IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
@@ -14,7 +15,8 @@ IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
     IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
     cvCvtColor(img, imgHSV, CV_BGR2HSV);
     IplImage* imgThreshed = cvCreateImage(cvGetSize(img), 8, 1);
-    cvInRangeS(imgHSV, cvScalar(30, 110, 110), cvScalar(35, 255, 255), imgThreshed);
+    //cvInRangeS(imgHSV, cvScalar(30, 125, 125), cvScalar(35, 255, 255), imgThreshed);
+    cvInRangeS(imgHSV, cvScalar(30, 125, 150), cvScalar(33, 255, 255), imgThreshed);
     cvReleaseImage(&imgHSV);
     return imgThreshed;
 }
@@ -49,8 +51,8 @@ void SearchBehavior::find() {
   if(this -> showWindow)
     cvNamedWindow("thresh");
 
-  while(areaCounter < 100){
-    frame = cvWueryFrame(capture);
+  while(areaCounter < 25){
+    frame = cvQueryFrame(capture);
     // Holds the yellow thresholded image (yellow = white, rest = black)
     IplImage* imgYellowThresh = SearchBehavior::get_thresholded_image(frame);
 
@@ -68,16 +70,27 @@ void SearchBehavior::find() {
 
     if(area > this -> minArea){
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
-      this -> create.motor_raw(0, -angularSpeed);
+      this -> create.motor_raw(0, angularSpeed*2);
       usleep(10);
       areaCounter++;
     } else {
       this -> create.motor_raw(0, 0.38);
       usleep(10);
     }
+
+    // display blob image in window
+    if(this -> showWindow){
+      cvShowImage("thresh", imgYellowThresh);
+
+      // Wait for a keypress
+      // just gives time for window to show
+      cvWaitKey(10);
+    }
   }
   this -> create.motor_raw(0, 0);
   usleep(10);
+
+  areaCounter = 0;
 
   // loop until area is greater than maxArea 3 times in a row
   while(areaCounter < 4){
@@ -105,15 +118,15 @@ void SearchBehavior::find() {
     // decide action based on area of the blob
     if(area > this -> minArea && area < this -> maxArea){
       // put motor command
-      this -> create.motor_raw(this -> velocity, -angularSpeed);
+      this -> create.motor_raw(this -> velocity, angularSpeed);
       usleep(10);
       // reset area counter
       areaCounter = 0;
-    } else if(area >= this -> maxArea && area < (this -> maxArea + 1000)) {
+    } else if(area >= this -> maxArea && area < (this -> maxArea + 30000)) {
       // area is above the threshold
       areaCounter++;
-    } else if(area >= (this -> maxArea + 1000)) {
-      this -> create.move(-this -> velocity, angularSpeed);
+    } else if(area >= (this -> maxArea + 30000)) {
+      this -> create.motor_raw(-this -> velocity, angularSpeed);
       usleep(10);
     } else {
       // spin

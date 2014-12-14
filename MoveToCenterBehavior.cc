@@ -2,6 +2,17 @@
 
 using namespace std;
 int i = 0;
+
+Mat MoveToCenterBehavior::GetThresholdedImage(Mat img)
+{
+    // Convert the image into an HSV image
+    Mat imgHSV = Mat(img.size(), 8, 3);
+    cvtColor(img, imgHSV, CV_BGR2HSV);
+    Mat imgThreshed = Mat(img.size(), 8, 1);
+    cv::inRange(imgHSV, Scalar(20, 100, 100), Scalar(30, 255, 255), imgThreshed);
+    return imgThreshed;
+}
+
 MoveToCenterBehavior::MoveToCenterBehavior(Create create, Mat vocabulary){
     this -> create = create;
     this -> imgWidth = 160;
@@ -27,7 +38,7 @@ Mat MoveToCenterBehavior::get_test_matrix() {
     // get the image
     while(!capture.read(frame))
         capture.read(frame);
- 
+    //frame = GetThresholdedImage(frame);
     const string file = "image" + std::to_string(i) + ".jpg";
     i++;
     imwrite(file, frame);
@@ -45,9 +56,9 @@ void MoveToCenterBehavior::drive_to_center(int testid){
             create.motor_raw(0,-2);
             usleep(500000);
             create.move(-1);
-            usleep(1500000);
+            usleep(2200000);
             create.motor_raw(0, 2);
-            usleep(200000);
+            usleep(350000);
             create.move(-1);
             usleep(1200000);
             break;
@@ -70,9 +81,9 @@ void MoveToCenterBehavior::drive_to_center(int testid){
             create.motor_raw(0, 2);
             usleep(500000);
             create.move(-1);
-            usleep(1500000);
+            usleep(2200000);
             create.motor_raw(0, -2);
-            usleep(200000);
+            usleep(350000);
             create.move(-1);
             usleep(1200000);
             break;
