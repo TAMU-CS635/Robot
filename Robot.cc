@@ -31,6 +31,7 @@ int main()
 
     Create::ir_values ir = create.read_ir();
     std::cout << ir.left << " " << ir.right << " " << ir.fleft << " " << ir.fright << std::endl;
+
     // instantiate search behavior
     // boolean is for showing the window
     SearchBehavior searchBehavior(create, true);
@@ -39,8 +40,8 @@ int main()
     MoveToCenterBehavior moveToCenterBehavior(create, vocabulary);
 
     int front_initial_ir = (ir.fleft + ir.fright) / 2;
-
     std::cout << "initial ir: " << initial_ir << std::endl;
+
     // instantiate drive over ramp behavior
     DriveOverRampBehavior driveOverRampBehavior(create, true, initial_ir);
     
@@ -50,10 +51,10 @@ int main()
     // An infinite loop
     while(region_id!=2)
     { 
-	// find the ramp and drive up to it
+	      // find the ramp and drive up to it
         searchBehavior.find();
-	// get the test matrix
-	response_hist = moveToCenterBehavior.get_test_matrix();
+	      // get the test matrix
+	      response_hist = moveToCenterBehavior.get_test_matrix();
         
         //compare list to find id region
         vector<double> region_list;
@@ -68,7 +69,7 @@ int main()
         //find the index of the minimum value, which is the region id
         region_id = std::min_element(region_list.begin(), region_list.end()) - region_list.begin();
 
-	// move based on region id
+	      // move based on region id
         moveToCenterBehavior.drive_to_center(region_id);
         printf("testid: %d\n", region_id);
     }
