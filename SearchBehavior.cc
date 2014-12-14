@@ -6,7 +6,7 @@ SearchBehavior::SearchBehavior(Create create, bool showWindow) {
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
   this -> minArea = 2000;
-  this -> maxArea = 95000;
+  this -> maxArea = 150000;
 }
 
 IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
@@ -14,7 +14,7 @@ IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
     IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
     cvCvtColor(img, imgHSV, CV_BGR2HSV);
     IplImage* imgThreshed = cvCreateImage(cvGetSize(img), 8, 1);
-    cvInRangeS(imgHSV, cvScalar(20, 100, 100), cvScalar(30, 255, 255), imgThreshed);
+    cvInRangeS(imgHSV, cvScalar(30, 110, 110), cvScalar(35, 255, 255), imgThreshed);
     cvReleaseImage(&imgHSV);
     return imgThreshed;
 }
