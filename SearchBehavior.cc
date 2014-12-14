@@ -6,7 +6,7 @@ SearchBehavior::SearchBehavior(Create create, bool showWindow) {
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
   this -> minArea = 1900;
-  this -> maxArea = 112000;
+  this -> maxArea = 113000;
   //this -> maxArea = 115000;
 }
 
@@ -122,10 +122,10 @@ void SearchBehavior::find() {
       usleep(10);
       // reset area counter
       areaCounter = 0;
-    } else if(area >= this -> maxArea && area < (this -> maxArea + 30000)) {
+    } else if(area >= this -> maxArea && area < (this -> maxArea + 20000)) {
       // area is above the threshold
       areaCounter++;
-    } else if(area >= (this -> maxArea + 30000)) {
+    } else if(area >= (this -> maxArea + 20000)) {
       this -> create.motor_raw(-this -> velocity, angularSpeed);
       usleep(10);
     } else {
