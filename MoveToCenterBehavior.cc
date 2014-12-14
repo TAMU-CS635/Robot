@@ -1,38 +1,38 @@
 #include "MoveToCenterBehavior.h"
 
-using namespace cv;
+using namespace std;
 
-MoveToCenterBehavior::MoveToCenterBehavior(Create create){
+MoveToCenterBehavior::MoveToCenterBehavior(Create create, Mat vocabulary){
     this -> create = create;
     this -> imgWidth = 160;
     this -> imgHeight = 120;
     this -> imgArea = imgWidth*imgHeight;
+    this -> vocabulary = vocabulary;
 }
 
 Mat MoveToCenterBehavior::get_test_matrix() {
-    Mat frame;
-    Mat imgMat;
+   
+    SurfFeatureDetector detector(500);
+    Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
+    Ptr<DescriptorExtractor> extractor = new SurfDescriptorExtractor();
+    BOWImgDescriptorExtractor bowide( extractor, matcher );
+    
+    bowide.setVocabulary( this -> vocabulary );
+    
+    Mat frame, response_hist;
+//    Mat imgMat;
 
     VideoCapture capture = VideoCapture(1);
 
     // get the image
     while(!capture.read(frame))
         capture.read(frame);
-  imgMat=imwrite("left.jpg",frame); 
-    cvtColor(frame, imgMat, CV_BGR2GRAY);
 
-    cv::resize(imgMat, imgMat, cv::Size(this -> imgWidth, this -> imgHeight), 0, 0, INTER_LINEAR);
+    vector<KeyPoint> keypoints;
+    detector.detect(frame,keypoints);
+    bowide.compute(frame, keypoints, response_hist);
 
-    Mat test(1, this -> imgArea, CV_32FC1);
-
-    int ii = 0;
-    for(int i = 0; i < imgMat.rows; i++){
-        for(int j = 0; j < imgMat.cols; j++){
-            test.at<float>(0, ii++) = (imgMat.at<uchar>(i, j)/255.0);
-        }
-    }
-
-    return test;
+    return response_hist;
 }
 
 void MoveToCenterBehavior::drive_to_center(int testid){

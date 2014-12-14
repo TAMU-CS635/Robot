@@ -13,8 +13,6 @@ void DriveOverRampBehavior::go() {
   double moment01 = 0;
   double area = 0;
 
-  bool overRamp = false;
-
   float angularSpeed = 0;
 
   int rampCounter = 0;
@@ -57,7 +55,7 @@ void DriveOverRampBehavior::go() {
     usleep(10);
 
     ir = create.read_ir();
-    if (ir.fleft > 1300 || ir.fright > 1300){
+    if (ir.fleft < 1150 || ir.fright < 1150){
         rampCounter++;
     } else {
         rampCounter = 0;
@@ -74,40 +72,6 @@ void DriveOverRampBehavior::go() {
 
     // avoid memory leaks
     cvReleaseImage(&imgYellowThresh);
-  }
-  rampCounter = 0;
-  // stop
-  this -> create.motor_raw(0,0);
-  usleep(10);
-
-  // turn 180
-  this -> create.motor_raw(0,-2.0);
-  usleep(1100000);
-
-  // stop
-  this -> create.motor_raw(0,0);
-  usleep(10);
-
-  // on the ramp
-  while(rampCounter < (this -> maxRampCounter + 10)) {
-    ir = create.read_ir();
-    if(ir.left < 200) {
-      // turn right
-      create.motor_raw(-this -> velocity, -2.0);
-      usleep(10);
-    } else if(ir.right < 200) {
-      // turn left
-      create.motor_raw(-this -> velocity, 2.0);
-      usleep(10);
-    } else {
-      create.move(-this -> velocity);
-      usleep(10);
-      if(ir.fleft < 1150 || ir.fright < 1150){
-        rampCounter++;
-      } else {
-        rampCounter = 0;
-      }
-    }
   }
   // stop
   this -> create.motor_raw(0,0);
