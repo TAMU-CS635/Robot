@@ -6,7 +6,7 @@ SearchBehavior::SearchBehavior(Create create, bool showWindow) {
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
   this -> minArea = 5000;
-  this -> maxArea = 120000;
+  this -> maxArea = 110000;
 }
 
 IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
@@ -14,7 +14,7 @@ IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
     IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
     cvCvtColor(img, imgHSV, CV_BGR2HSV);
     IplImage* imgThreshed = cvCreateImage(cvGetSize(img), 8, 1);
-    cvInRangeS(imgHSV, cvScalar(15, 95, 95), cvScalar(45, 255, 255), imgThreshed);
+    cvInRangeS(imgHSV, cvScalar(20, 90, 90), cvScalar(30, 255, 255), imgThreshed);
     cvReleaseImage(&imgHSV);
     return imgThreshed;
 }
@@ -47,8 +47,6 @@ void SearchBehavior::find() {
   if(this -> showWindow)
     cvNamedWindow("thresh");
 
-  bool moved = false;
-
   // loop until area is greater than maxArea 3 times in a row
   while(areaCounter < 4){
     frame = cvQueryFrame(capture);
@@ -67,10 +65,9 @@ void SearchBehavior::find() {
     moment01 = cvGetSpatialMoment(moments, 0, 1);
 
     area = cvGetSpatialMoment(moments, 0, 0);
-
+    std::cout << "Area: " << area << std::endl; 
     // decide action based on area of the blob
     if(area > this -> minArea && area < this -> maxArea){
-      moved=true;
       // calculate angular speed
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
       // put motor command
@@ -81,14 +78,6 @@ void SearchBehavior::find() {
     } else if(area >= this -> maxArea) {
       // area is above the threshold
       areaCounter++;
-        if(areaCounter==4&&moved==false){
-
-        create.move(1);
-        usleep(300000);    
-        areaCounter=0;
-
-        }
-            
     } else {
       // spin
       this -> create.motor_raw(0, 0.38);
