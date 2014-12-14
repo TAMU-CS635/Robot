@@ -8,13 +8,6 @@ using namespace cv;
 
 int main()
 {
-//    int testid = 0;
-//
-//    CvSVM svm;
-//    printf("loading learned_lib\n");
-//    //Load learned library
-//    svm.load("learned_lib");
-    
     int region_id;
     // load vocabulary data
     Mat vocabulary;
@@ -36,6 +29,8 @@ int main()
 
     create.calibrate_ir();
 
+    Create::ir_values ir = create.read_ir();
+    std::cout << ir.left << " " << ir.right << " " << ir.fleft << " " << ir.fright << std::endl;
     // instantiate search behavior
     // boolean is for showing the window
     SearchBehavior searchBehavior(create, true);
@@ -43,19 +38,22 @@ int main()
     // instantiate move to center behavior
     MoveToCenterBehavior moveToCenterBehavior(create, vocabulary);
 
-    DriveOverRampBehavior driveOverRampBehavior(create, true);
+    int initial_ir = (ir.fleft + ir.fright) / 2;
+
+    std::cout << "initial ir: " << initial_ir << std::endl;
+    // instantiate drive over ramp behavior
+    DriveOverRampBehavior driveOverRampBehavior(create, true, initial_ir);
     
     // matrix for the test
     Mat response_hist;
 
     // An infinite loop
     while(region_id!=2)
-
     { 
-	    // find the ramp and drive up to it
+	// find the ramp and drive up to it
         searchBehavior.find();
-	    // get the test matrix
-	    response_hist = moveToCenterBehavior.get_test_matrix();
+	// get the test matrix
+	response_hist = moveToCenterBehavior.get_test_matrix();
         
         //compare list to find id region
         vector<double> region_list;
@@ -70,12 +68,11 @@ int main()
         //find the index of the minimum value, which is the region id
         region_id = std::min_element(region_list.begin(), region_list.end()) - region_list.begin();
 
-	    // move based on region id
-        //moveToCenterBehavior.drive_to_center(region_id);
-        break;
+	// move based on region id
+        moveToCenterBehavior.drive_to_center(region_id);
         printf("testid: %d\n", region_id);
     }
-    //driveOverRampBehavior.go();
+    driveOverRampBehavior.go();
 
     return 0;
 }

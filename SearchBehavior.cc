@@ -5,8 +5,8 @@ SearchBehavior::SearchBehavior(Create create, bool showWindow) {
   this -> create = create;
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
-  this -> minArea = 5000;
-  this -> maxArea = 110000;
+  this -> minArea = 2000;
+  this -> maxArea = 95000;
 }
 
 IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
@@ -14,7 +14,7 @@ IplImage* SearchBehavior::get_thresholded_image(IplImage* img) {
     IplImage* imgHSV = cvCreateImage(cvGetSize(img), 8, 3);
     cvCvtColor(img, imgHSV, CV_BGR2HSV);
     IplImage* imgThreshed = cvCreateImage(cvGetSize(img), 8, 1);
-    cvInRangeS(imgHSV, cvScalar(20, 90, 90), cvScalar(30, 255, 255), imgThreshed);
+    cvInRangeS(imgHSV, cvScalar(20, 100, 100), cvScalar(30, 255, 255), imgThreshed);
     cvReleaseImage(&imgHSV);
     return imgThreshed;
 }
@@ -41,7 +41,7 @@ void SearchBehavior::find() {
   IplImage* frame = 0;
   // initialize the camera
   CvCapture* capture = 0;
-  capture = cvCaptureFromCAM(1);
+  capture = cvCaptureFromCAM(2);
 
   // create a window
   if(this -> showWindow)
@@ -71,7 +71,7 @@ void SearchBehavior::find() {
       // calculate angular speed
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
       // put motor command
-      this -> create.motor_raw(this -> velocity, angularSpeed);
+      this -> create.motor_raw(this -> velocity, -angularSpeed);
       usleep(10);
       // reset area counter
       areaCounter = 0;

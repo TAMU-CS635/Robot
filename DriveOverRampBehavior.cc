@@ -1,11 +1,12 @@
 #include "DriveOverRampBehavior.h"
 #include "SearchBehavior.h"
 
-DriveOverRampBehavior::DriveOverRampBehavior(Create create, bool showWindow) {
+DriveOverRampBehavior::DriveOverRampBehavior(Create create, bool showWindow, int initial_ir) {
   this -> create = create;
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
-  this -> maxRampCounter = 20;
+  this -> maxRampCounter = 25;
+  this -> initial_ir = initial_ir;
 }
 
 void DriveOverRampBehavior::go() {
@@ -21,11 +22,11 @@ void DriveOverRampBehavior::go() {
 
   Create::ir_values ir;
 
-  // variable to hold the fram
+  // variable to hold the frame
   IplImage* frame = 0;
   // initialize the camera
   CvCapture* capture = 0;
-  capture = cvCaptureFromCAM(1);
+  capture = cvCaptureFromCAM(2);
 
   // create a window
   if(this -> showWindow)
@@ -53,11 +54,12 @@ void DriveOverRampBehavior::go() {
     // calculate angular speed
     angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
     // put motor command
-    this -> create.motor_raw(this -> velocity, angularSpeed);
+    this -> create.motor_raw(this -> velocity, -angularSpeed);
     usleep(10);
 
     ir = create.read_ir();
-    if (ir.fleft > 1300 || ir.fright > 1300){
+    std::cout << "fleft: " << ir.fleft << " fright: " << ir.fright << std::endl;
+    if (ir.fleft > (this -> initial_ir + 150) && ir.fright > (this -> initial_ir + 150)){
         rampCounter++;
     } else {
         rampCounter = 0;
@@ -91,6 +93,7 @@ void DriveOverRampBehavior::go() {
   // on the ramp
   while(rampCounter < (this -> maxRampCounter + 10)) {
     ir = create.read_ir();
+    std::cout << "fleft: " << ir.fleft << " fright: " << ir.fright << std::endl;
     if(ir.left < 200) {
       // turn right
       create.motor_raw(-this -> velocity, -2.0);
@@ -102,7 +105,7 @@ void DriveOverRampBehavior::go() {
     } else {
       create.move(-this -> velocity);
       usleep(10);
-      if(ir.fleft < 1150 || ir.fright < 1150){
+      if(ir.fleft < (initial_ir + 50) && (ir.fright < initial_ir + 50)){
         rampCounter++;
       } else {
         rampCounter = 0;
