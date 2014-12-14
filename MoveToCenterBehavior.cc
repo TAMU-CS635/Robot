@@ -12,7 +12,7 @@ MoveToCenterBehavior::MoveToCenterBehavior(Create create, Mat vocabulary){
 
 Mat MoveToCenterBehavior::get_test_matrix() {
    
-    SurfFeatureDetector detector(500);
+    SurfFeatureDetector detector(1000);
     Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
     Ptr<DescriptorExtractor> extractor = new SurfDescriptorExtractor();
     BOWImgDescriptorExtractor bowide( extractor, matcher );
