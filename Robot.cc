@@ -49,7 +49,7 @@ int main()
     
     // matrix for the test
     Mat response_hist;
-
+/*
     // An infinite loop
     while(region_id!=2)
     { 
@@ -75,6 +75,7 @@ int main()
         moveToCenterBehavior.drive_to_center(region_id);
         printf("testid: %d\n", region_id);
     }
+*/
     driveOverRampBehavior.go();
 
     return 0;

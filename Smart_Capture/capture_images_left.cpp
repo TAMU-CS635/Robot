@@ -1,11 +1,13 @@
 #include "opencv2/opencv.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/core/core.hpp"
+#include <opencv2/nonfree/features2d.hpp>
+#include "opencv2/features2d/features2d.hpp"
+#include <opencv2/ml/ml.hpp>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <unistd.h>
-#include <string.h>
 
 using namespace cv;
 using namespace std;
@@ -15,7 +17,7 @@ int main()
     SurfFeatureDetector detector(1000);
     Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
     Ptr<DescriptorExtractor> extractor = new SurfDescriptorExtractor();
-    BOWImgDescriptorExtractor bowide( extractor, matcher );
+    BOWframeDescriptorExtractor bowide( extractor, matcher );
     
     // load vocabulary data
     Mat vocabulary;
@@ -46,15 +48,15 @@ int main()
     while(true)
     {
         // Will hold a frame captured from the camera
-        Mat img;
+        Mat frame, response_hist;
         
         // If we couldn't grab a frame... quit
         if(!capture.read(frame))
             break;
-        imshow("video", img);
+        imshow("video", frame);
         vector<KeyPoint> keypoints;
-        detector.detect(img,keypoints);
-        bowide.compute(img, keypoints, response_hist);
+        detector.detect(frame,keypoints);
+        bowide.compute(frame, keypoints, response_hist);
         
         vector<double> region_list;
         region_list.push_back(svm_left.predict(response_hist,true));
