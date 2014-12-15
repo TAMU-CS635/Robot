@@ -35,18 +35,13 @@ int main()
 
     // instantiate search behavior
     // boolean is for showing the window
-    SearchBehavior searchBehavior(create, true);
+    SearchBehavior searchBehavior(&create, true);
 
     // instantiate move to center behavior
-    MoveToCenterBehavior moveToCenterBehavior(create, vocabulary);
-
-
-    int initial_ir = (ir.fleft + ir.fright) / 2;
-
-    std::cout << "initial ir: " << initial_ir << std::endl;
+    MoveToCenterBehavior moveToCenterBehavior(&create, vocabulary);
 
     // instantiate drive over ramp behavior
-    DriveOverRampBehavior driveOverRampBehavior(create, true, initial_ir);
+    DriveOverRampBehavior driveOverRampBehavior(&create);
     
     // matrix for the test
     Mat response_hist;

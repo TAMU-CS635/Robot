@@ -9,7 +9,7 @@
 
 class SearchBehavior {
   private:
-    Create create;
+    Create *create;
 
     float velocity;
 
@@ -19,7 +19,7 @@ class SearchBehavior {
     bool showWindow;
 
   public:
-    SearchBehavior(Create create, bool showWindow);
+    SearchBehavior(Create *create, bool showWindow);
 
     void find();
 

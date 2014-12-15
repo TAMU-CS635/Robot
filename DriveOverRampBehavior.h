@@ -10,14 +10,11 @@
 
 class DriveOverRampBehavior {
     private:
-        Create create;
+        Create *create;
         float velocity;
-        bool showWindow;
-        int maxRampCounter;
-        int initial_ir;
 
     public:
-        DriveOverRampBehavior(Create create, bool showWindow, int initial_ir);
+        DriveOverRampBehavior(Create *create);
 
         void go();
 };

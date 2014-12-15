@@ -18,14 +18,14 @@ using namespace cv;
 
 class MoveToCenterBehavior {
     private:
-        Create create;
+        Create *create;
         int imgWidth;
         int imgHeight;
         int imgArea;
         Mat vocabulary;
 
     public:
-        MoveToCenterBehavior(Create create, Mat vocabulary);
+        MoveToCenterBehavior(Create *create, Mat vocabulary);
         
         cv::Mat GetThresholdedImage(Mat img);
         cv::Mat get_test_matrix();

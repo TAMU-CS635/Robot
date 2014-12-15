@@ -13,7 +13,7 @@ Mat MoveToCenterBehavior::GetThresholdedImage(Mat img)
     return imgThreshed;
 }
 
-MoveToCenterBehavior::MoveToCenterBehavior(Create create, Mat vocabulary){
+MoveToCenterBehavior::MoveToCenterBehavior(Create *create, Mat vocabulary){
     this -> create = create;
     this -> imgWidth = 160;
     this -> imgHeight = 120;
@@ -53,41 +53,41 @@ void MoveToCenterBehavior::drive_to_center(int testid){
     switch(testid){
         // left
         case 0:
-            create.motor_raw(0,-2);
+            create->motor_raw(0,-2);
             usleep(500000);
-            create.move(-1);
+            create->move(-1);
             usleep(2200000);
-            create.motor_raw(0, 2);
+            create->motor_raw(0, 2);
             usleep(350000);
-            create.move(-1);
+            create->move(-1);
             usleep(1200000);
             break;
         // left - mid
         case 1:
-            create.motor_raw(0,-2);
+            create->motor_raw(0,-2);
             usleep(500000);
-            create.move(-1);
+            create->move(-1);
             usleep(1500000);
             break;
         // right - mid
         case 3:
-            create.motor_raw(0, 2);
+            create->motor_raw(0, 2);
             usleep(500000);
-            create.move(-1);
+            create->move(-1);
             usleep(1500000);
             break;
         // right
         case 4:
-            create.motor_raw(0, 2);
+            create->motor_raw(0, 2);
             usleep(500000);
-            create.move(-1);
+            create->move(-1);
             usleep(2200000);
-            create.motor_raw(0, -2);
+            create->motor_raw(0, -2);
             usleep(350000);
-            create.move(-1);
+            create->move(-1);
             usleep(1200000);
             break;
     }
-    create.motor_raw(0, 0);
+    create->motor_raw(0, 0);
     usleep(10);
 }

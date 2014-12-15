@@ -1,7 +1,7 @@
 #include "SearchBehavior.h"
 
 
-SearchBehavior::SearchBehavior(Create create, bool showWindow) {
+SearchBehavior::SearchBehavior(Create *create, bool showWindow) {
   this -> create = create;
   this -> showWindow = showWindow;
   this -> velocity = -0.1;
@@ -70,11 +70,11 @@ void SearchBehavior::find() {
 
     if(area > this -> minArea){
       angularSpeed = SearchBehavior::get_angular_speed(moment10, moment01, area);
-      this -> create.motor_raw(0, angularSpeed*2);
+      create->motor_raw(0, angularSpeed*2);
       usleep(10);
       areaCounter++;
     } else {
-      this -> create.motor_raw(0, 0.38);
+      create->motor_raw(0, 0.38);
       usleep(10);
     }
 
@@ -87,7 +87,7 @@ void SearchBehavior::find() {
       cvWaitKey(10);
     }
   }
-  this -> create.motor_raw(0, 0);
+  create->motor_raw(0, 0);
   usleep(10);
 
   areaCounter = 0;
@@ -118,7 +118,7 @@ void SearchBehavior::find() {
     // decide action based on area of the blob
     if(area > this -> minArea && area < this -> maxArea){
       // put motor command
-      this -> create.motor_raw(this -> velocity, angularSpeed);
+      create->motor_raw(this -> velocity, angularSpeed);
       usleep(10);
       // reset area counter
       areaCounter = 0;
@@ -126,11 +126,11 @@ void SearchBehavior::find() {
       // area is above the threshold
       areaCounter++;
     } else if(area >= (this -> maxArea + 20000)) {
-      this -> create.motor_raw(-this -> velocity, angularSpeed);
+      create->motor_raw(-this -> velocity, angularSpeed);
       usleep(10);
     } else {
       // spin
-      this -> create.motor_raw(0, 0.38);
+      create->motor_raw(0, 0.38);
       usleep(10);
       // reset area counter
       areaCounter = 0;
@@ -149,7 +149,7 @@ void SearchBehavior::find() {
     cvReleaseImage(&imgYellowThresh);
   }
   // stop
-  this -> create.motor_raw(0,0);
+  create->motor_raw(0,0);
   usleep(10);
 
   // release the camera
