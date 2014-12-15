@@ -8,7 +8,7 @@ using namespace cv;
 
 int main()
 {
-    int region_id;
+    int region_id = 0;
     // load vocabulary data
     Mat vocabulary;
     FileStorage fs( "vocabulary.xml", FileStorage::READ);
@@ -25,6 +25,7 @@ int main()
 
     //Initialize IRobot Create
     Create create;
+
     create.lights(0, 0, 0);
 
     create.calibrate_ir();
@@ -55,6 +56,7 @@ int main()
     { 
 	      // find the ramp and drive up to it
         searchBehavior.find();
+
 	      // get the test matrix
 	      response_hist = moveToCenterBehavior.get_test_matrix();
         
