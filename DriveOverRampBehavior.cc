@@ -4,7 +4,7 @@
 DriveOverRampBehavior::DriveOverRampBehavior(Create create, bool showWindow, int initial_ir) {
   this -> create = create;
   this -> showWindow = showWindow;
-  this -> velocity = -0.2;
+  this -> velocity = -0.15;
   this -> maxRampCounter = 15;
   this -> initial_ir = initial_ir;
 }
@@ -84,7 +84,7 @@ void DriveOverRampBehavior::go() {
 
   // turn 180
   this -> create.motor_raw(0,-2.0);
-  usleep(1300000);
+  usleep(1200000);
 
   // stop
   this -> create.motor_raw(0,0);
