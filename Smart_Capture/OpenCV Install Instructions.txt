@@ -1,0 +1,9 @@
+-Install OpenCV on Mac:
+	http://goinghifi.com/installing-opencv-2-on-mavericks-10-9-5-with-xcode-6/
+	
+-Install OpenCV on Ubuntu:
+	https://help.ubuntu.com/community/OpenCV
+	
+-Compile and Run C++ OpenCV code on Ubuntu:
+	$ g++ -ggdb `pkg-config --cflags opencv` -o `basename filename.cpp .cpp` filename.cpp `pkg-config --libs opencv`
+   	$ ./filename
