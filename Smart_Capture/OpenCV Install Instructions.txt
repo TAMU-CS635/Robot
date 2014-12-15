@@ -1,9 +1,9 @@
--Install OpenCV on Mac:
-	http://goinghifi.com/installing-opencv-2-on-mavericks-10-9-5-with-xcode-6/
-	
--Install OpenCV on Ubuntu:
-	https://help.ubuntu.com/community/OpenCV
-	
--Compile and Run C++ OpenCV code on Ubuntu:
-	$ g++ -ggdb `pkg-config --cflags opencv` -o `basename filename.cpp .cpp` filename.cpp `pkg-config --libs opencv`
-   	$ ./filename
+g++ -ggdb `pkg-config --cflags opencv` capture_images_left.cpp -o capture_images_left `pkg-config --libs opencv`
+
+g++ -ggdb `pkg-config --cflags opencv` capture_images_left_mid.cpp -o capture_images_left_mid `pkg-config --libs opencv`
+
+g++ -ggdb `pkg-config --cflags opencv` capture_images_mid.cpp -o capture_images_mid `pkg-config --libs opencv`
+
+g++ -ggdb `pkg-config --cflags opencv` capture_images_right_mid.cpp -o capture_images_right_mid `pkg-config --libs opencv`
+
+g++ -ggdb `pkg-config --cflags opencv` capture_images_right.cpp -o capture_images_right `pkg-config --libs opencv`

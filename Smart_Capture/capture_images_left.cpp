@@ -17,7 +17,7 @@ int main()
     SurfFeatureDetector detector(1000);
     Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
     Ptr<DescriptorExtractor> extractor = new SurfDescriptorExtractor();
-    BOWframeDescriptorExtractor bowide( extractor, matcher );
+    BOWImgDescriptorExtractor bowide( extractor, matcher );
     
     // load vocabulary data
     Mat vocabulary;
