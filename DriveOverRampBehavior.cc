@@ -18,7 +18,7 @@ void DriveOverRampBehavior::go() {
 
   // turn 180
   create->motor_raw(0,-2.0);
-  usleep(1100000);
+  usleep(1050000);
 
   // stop
   create->motor_raw(0,0);
@@ -29,7 +29,7 @@ void DriveOverRampBehavior::go() {
   double differenceTime = 0;
 
   // on the ramp
-  while(differenceTime < 10) {
+  while(differenceTime < 10.5) {
     ir = create->read_ir();
     if(ir.left < 200) {
       // turn right

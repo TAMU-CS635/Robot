@@ -41,6 +41,10 @@ void SearchBehavior::find() {
 
   int areaCounter = 0;
 
+  double timer = 0;
+  time_t startTime = time(NULL);
+  time_t currentTime = time(NULL);
+
   // variable to hold the fram
   IplImage* frame = 0;
   // initialize the camera
@@ -76,6 +80,22 @@ void SearchBehavior::find() {
     } else {
       create->motor_raw(0, 0.38);
       usleep(10);
+      // update timer
+      currentTime = time(NULL);
+      timer = difftime(currentTime, startTime);
+    }
+    if (timer > 9) {
+       // turn 180
+       create->motor_raw(0, 2);
+       usleep(1100000);
+       create->motor_raw(0,0);
+       usleep(10);
+       // reinitialize camera]
+       // release the camera
+       cvReleaseCapture(&capture);
+       capture = cvCaptureFromCAM(2);
+       timer = 0;
+       startTime = time(NULL);
     }
 
     // display blob image in window

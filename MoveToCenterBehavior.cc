@@ -79,9 +79,9 @@ void MoveToCenterBehavior::drive_to_center(int testid){
         // right
         case 4:
             create->motor_raw(0, 2);
-            usleep(500000);
+            usleep(450000);
             create->move(-1);
-            usleep(2200000);
+            usleep(1500000);
             create->motor_raw(0, -2);
             usleep(350000);
             create->move(-1);
