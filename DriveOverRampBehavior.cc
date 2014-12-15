@@ -5,7 +5,7 @@ DriveOverRampBehavior::DriveOverRampBehavior(Create create, bool showWindow, int
   this -> create = create;
   this -> showWindow = showWindow;
   this -> velocity = -0.2;
-  this -> maxRampCounter = 8;
+  this -> maxRampCounter = 10;
   this -> initial_ir = initial_ir;
 }
 
@@ -59,7 +59,7 @@ void DriveOverRampBehavior::go() {
 
     ir = create.read_ir();
     std::cout << "fleft: " << ir.fleft << " fright: " << ir.fright << std::endl;
-    if (ir.fleft > (this -> initial_ir + 150) && ir.fright > (this -> initial_ir + 150)){
+    if (ir.fleft > (this -> initial_ir + 250) || ir.fright > (this -> initial_ir + 250)){
         rampCounter++;
     } else {
         rampCounter = 0;
